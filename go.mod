@@ -1,4 +1,4 @@
-module githib.com/affise/go-affise-tracking
+module github.com/affise/go-tracking
 
 go 1.21
 

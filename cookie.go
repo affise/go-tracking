@@ -1,4 +1,4 @@
-package affise
+package tracking
 
 import (
 	"errors"
@@ -23,18 +23,16 @@ var ErrNoQueryParam = errors.New("query has no click id param")
 // SetCookieMiddleware is net/http middleware. It calls SetCookie to write click id cookie header.
 func SetCookieMiddleware(next http.Handler, errs chan<- error) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer next.ServeHTTP(w, r)
-
 		SetCookie(w, r, errs)
+		next.ServeHTTP(w, r)
 	})
 }
 
 // MustSetCookieMiddleware is net/http middleware. It calls MustSetCookie to write click id cookie header.
 func MustSetCookieMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer next.ServeHTTP(w, r)
-
 		MustSetCookie(w, r)
+		next.ServeHTTP(w, r)
 	})
 }
 

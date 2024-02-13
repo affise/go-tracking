@@ -1,33 +1,82 @@
-# go-affise-tracking [![GoDoc](https://godoc.org/github.com/affise/go-affise-tracking?status.svg)](https://godoc.org/github.com/affise/go-affise-tracking)
+# go-affise-tracking [![GoDoc](https://godoc.org/github.com/affise/go-tracking?status.svg)](https://godoc.org/github.com/affise/go-tracking)
 
-- [Clicks tracking](#clicks-tracking)
-- [Conversions tracking](#conversions-tracking)
+Affise tracking SDK for go.
 
+## Installation
 
-## Clicks tracking
+To install it in the GOPATH:
+```
+go get https://github.com/affise/go-tracking
+```
+## Documentation
 
-To use first-party cookie there are two middlewares and two methods that's used by middlewares.
+The links bellow should provide all the documentation needed to make the best
+use of the library and the Segment API:
 
-Middlewares
-- **SetCookieMiddleware** is net/http middleware. It calls SetCookie to write click id cookie header and may throw ErrNoQueryParam error to channel.
-- **MustSetCookieMiddleware** is net/http middleware. It calls MustSetCookie to write click id cookie header.
+- [Documentation](https://help-center.affise.com/en/articles/6466563-postback-integration-s2s-admins)
+- [godoc](https://godoc.org/github.com/affise/go-tracking)
 
-Methods
-- **SetCookie** writes click id cookie to http.ResponseWriter and may throw ErrNoQueryParam error to channel.
-- **MustSetCookie** writes click id cookie to http.ResponseWriter. This method ignores errors.
+## Usage
 
-## Conversions tracking
+### Clicks
 
-To make s2s-integration you can use Postback settings and methods with it.
+```go
+package main
 
-Postback has one required field - ClickID. Other fields are optional.
+import (
+	"log"
+	"net/http"
 
-To make requests or do them it's useful create new PostbackProvider using NewPostbackProvider func.
+	"github.com/affise/go-tracking"
+)
 
-This provider has next methods:
-- **Request** returns http.Request for specified Postback.
-- **RequestWithCookie** returns http.Request for specified Postback filling click id from specified http.Request.
-- **Do** requests Postback with specified http.Client.
-- **DoWithCookie** requests Postback with http.Client using click id cookie from http.Request.
-- **DoDefault** requests Postback with http.DefaultClient.
-- **DoDefaultWithCookie** requests Postback with http.DefaultClient using click id cookie from http.Request.
+func main() {
+	http.HandleFunc("/click", func(w http.ResponseWriter, r *http.Request) {
+		// request should contain param click_id/clickid/afclick 
+		tracking.MustSetCookie(w, r)
+		
+		// ...
+	})
+
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
+		log.Fatalf("server error: %v", err)
+	}
+}
+```
+
+### Conversions
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/affise/go-tracking"
+)
+
+func main() {
+	pp := tracking.NewPostbackProvider("offers-client.affise.com", true)
+	
+	http.HandleFunc("/postback", func(w http.ResponseWriter, r *http.Request) {
+		// request should contain first-party cookie 
+		err := pp.DoDefaultWithCookie(r, &tracking.Postback{
+			ActionID: "advertiser action id",
+		})
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		
+		// ...
+	})
+
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
+		log.Fatalf("server error: %v", err)
+	}
+}
+
+```
