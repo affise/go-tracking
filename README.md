@@ -11,7 +11,7 @@ go get https://github.com/affise/go-tracking
 ## Documentation
 
 The links bellow should provide all the documentation needed to make the best
-use of the library and the Segment API:
+use of the library:
 
 - [Documentation](https://help-center.affise.com/en/articles/6466563-postback-integration-s2s-admins)
 - [godoc](https://godoc.org/github.com/affise/go-tracking)
