@@ -93,6 +93,10 @@ issues:
         - lll
         - gocritic
         - unparam
+        - funlen
+        - exhaustivestruct
+        - exhaustruct
+        - testpackage
 
     - linters:
         - govet
