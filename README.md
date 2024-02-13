@@ -1,4 +1,4 @@
-# go-affise-tracking [![GoDoc](https://godoc.org/github.com/affise/go-tracking?status.svg)](https://godoc.org/github.com/affise/go-tracking)
+# go-tracking [![GoDoc](https://godoc.org/github.com/affise/go-tracking?status.svg)](https://godoc.org/github.com/affise/go-tracking)
 
 Affise tracking SDK for go.
 
