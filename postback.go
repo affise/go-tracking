@@ -62,7 +62,7 @@ type Postback struct {
 	ClickID      string
 	ActionID     string
 	Goal         string
-	Sum          float64
+	Sum          *float64 // to be able to set zero-value
 	IP           *net.IP
 	Status       PostbackStatus
 	Referrer     string
@@ -130,8 +130,8 @@ func (p *PostbackProvider) query(pb *Postback) url.Values {
 		}
 	}
 
-	if pb.Sum != 0 {
-		q.Set(sum, fmt.Sprintf("%v", pb.Sum))
+	if pb.Sum != nil {
+		q.Set(sum, fmt.Sprintf("%v", *pb.Sum))
 	}
 
 	if pb.IP != nil {

@@ -1,2 +1,2 @@
-// Package affise contains methods of affise-tracking go-SDK.
+// Package tracking contains methods of Affise tracking go-SDK.
 package tracking

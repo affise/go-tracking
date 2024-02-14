@@ -45,7 +45,7 @@ func TestPostbackProvider_Request(t *testing.T) {
 				ClickID:    "111111111111111111111111",
 				ActionID:   "2",
 				Goal:       "3",
-				Sum:        4,
+				Sum:        float64Ptr(4),
 				IP:         &ip,
 				Status:     PostbackStatusConfirmed,
 				Referrer:   "9",
@@ -74,4 +74,8 @@ func TestPostbackProvider_Request(t *testing.T) {
 			require.Equal(t, tc.exp, r)
 		})
 	}
+}
+
+func float64Ptr(x float64) *float64 {
+	return &x
 }
